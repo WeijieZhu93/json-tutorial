@@ -20,6 +20,12 @@ static int test_pass = 0;
 
 #define EXPECT_EQ_INT(expect, actual) EXPECT_EQ_BASE((expect) == (actual), expect, actual, "%d")
 #define EXPECT_EQ_DOUBLE(expect, actual) EXPECT_EQ_BASE((expect) == (actual), expect, actual, "%.17g")
+static void test_parse_literal(int type, char * json) {
+    lept_value v;
+    v.type = type;
+    EXPECT_EQ_INT(LEPT_PARSE_OK, lept_parse(&v, json));
+    EXPECT_EQ_INT(type, lept_get_type(&v));
+}
 
 static void test_parse_null() {
     lept_value v;
@@ -121,9 +127,14 @@ static void test_parse_number_too_big() {
 }
 
 static void test_parse() {
+#if 0
     test_parse_null();
     test_parse_true();
     test_parse_false();
+#endif
+    test_parse_literal(LEPT_NULL, "null");
+    test_parse_literal(LEPT_TRUE, "true");
+    test_parse_literal(LEPT_TRUE, "true");
     test_parse_number();
     test_parse_expect_value();
     test_parse_invalid_value();
